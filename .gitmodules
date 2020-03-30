@@ -1,0 +1,3 @@
+[submodule "comicvm-geometry-2d"]
+	path = comicvm-geometry-2d
+	url = https://github.com/retojs/comicvm-geometry-2d.git

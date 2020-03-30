@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true,
+    "lib": [
+      "dom",
+      "es2016"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@comicvm-geometry-2d/*": ["comicvm-geometry-2d/src/geometry-2d/*"]
+    }
+  }
+}
