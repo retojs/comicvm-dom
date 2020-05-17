@@ -9,7 +9,10 @@ export function createInputDemo(): Div {
         placeholder: "Write something..."
     })
     const label = Label.create();
+    
     input.onKeyUp = (e: KeyboardEvent) => label.text = `You wrote ${input.value}.`
+    
+    input.onInit = () => input.focus();
 
     return Div.create({ styleClass: "demo-section" })
         .append("<h2>Input</h2>")

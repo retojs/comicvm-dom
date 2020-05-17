@@ -12,12 +12,12 @@ describe("Input", () => {
             "style-class",
         );
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.type).toBe(InputType.TEXT);
-        expect(btn.domElement.name).toBe("name");
-        expect(btn.domElement.value).toBe("value");
-        expect(btn.domElement.placeholder).toBe("placeholder");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.type).toBe(InputType.TEXT);
+        expect(btn.htmlElement.name).toBe("name");
+        expect(btn.htmlElement.value).toBe("value");
+        expect(btn.htmlElement.placeholder).toBe("placeholder");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created with config", () => {
@@ -30,23 +30,23 @@ describe("Input", () => {
             styleClass: "style-class",
         });
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.type).toBe(InputType.CHECKBOX);
-        expect(btn.domElement.name).toBe("name");
-        expect(btn.domElement.value).toBe("value");
-        expect(btn.domElement.placeholder).toBe("placeholder");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.type).toBe(InputType.CHECKBOX);
+        expect(btn.htmlElement.name).toBe("name");
+        expect(btn.htmlElement.value).toBe("value");
+        expect(btn.htmlElement.placeholder).toBe("placeholder");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created without config", () => {
         const btn = Input.create();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 
     it("can be created without constructor arguments", () => {
         const btn = new Input();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 });

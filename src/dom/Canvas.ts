@@ -1,40 +1,39 @@
+import { Line } from "@comicvm-geometry-2d/Line";
 import { Margin } from "@comicvm-geometry-2d/Margin";
 import { Point } from "@comicvm-geometry-2d/Point";
 import { Rectangle } from "@comicvm-geometry-2d/Rectangle";
 import { Transform } from "@comicvm-geometry-2d/Transform";
-import { DomElement, DomElementContainer, DomElementConfig, StyleClassConfig } from "./DomElement";
+import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 import { Img } from "./Img";
 import { Font } from "./util/Font";
-import { PaintStyle } from "./util/PaintStyle";
+import { PaintStyle, PaintStyleConfig } from "./util/PaintStyle";
 import { TextAlign } from "./util/TextAlign";
-import { Line } from "@comicvm-geometry-2d/Line";
 
-export const defaultCanvasFont = new Font(14, "Roboto");
+export const DEFAULT_FONT = new Font(14, "Roboto");
 
 export interface CanvasDomElementConfig extends DomElementConfig, StyleClassConfig {
     width?: number;
     height?: number;
-    scale?: number;
-    font?: Font;
+    paintStyleConfig: PaintStyleConfig;
 }
 
 export class Canvas extends DomElement<HTMLCanvasElement> {
 
-    domElement: HTMLCanvasElement;
+    htmlElement: HTMLCanvasElement;
 
     width: number;
     height: number;
-    scale: number;
-    font: Font;
 
+    font: Font;
     globalAlpha = 1.0;
     backgroundColor = PaintStyle.fill("white");
+    currentTransform = new Transform(0, 0, 1.0);
 
-    private lineHeights: number[] = [];  // a cache for line heights per font
+    private lineHeight4Font: number[] = [];  // a cache for line heights per font
 
     public static create(config?: CanvasDomElementConfig) {
         return config
-            ? new Canvas(config.container, config.width, config.height, config.scale, config.font, config.styleClass)
+            ? new Canvas(config.container, config.width, config.height, config.paintStyleConfig, config.styleClass)
             : new Canvas();
     }
 
@@ -42,53 +41,53 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
         container?: DomElementContainer,
         width?: number,
         height?: number,
-        scale?: number,
-        font?: Font,
+        paintStyleConfig?: PaintStyleConfig,
         styleClass?: string,
     ) {
         super(container);
-        this.domElement = this.createCanvasElement();
+        this.htmlElement = this.createCanvasElement();
 
         this.setDimensions(width, height);
-        this.setFont(this.font = font);
-        this.setScale(scale);
+        this.applyPaintStyles(PaintStyle.create(paintStyleConfig));
+        this.class = styleClass;
 
         this.ctx.imageSmoothingEnabled = true;
         this.ctx.imageSmoothingQuality = 'high';
-
-        this.class = styleClass;
     }
 
     get ctx(): CanvasRenderingContext2D {
-        return this.domElement.getContext("2d");
+        return this.htmlElement.getContext("2d");
+    }
+
+    get scale(): number {
+        return (this.currentTransform && this.currentTransform.scale) || 1.0;
     }
 
     createCanvasElement(): HTMLCanvasElement {
-        return this.domElement = this.appendToContainer(document.createElement("canvas"));
+        return this.htmlElement = this.appendToContainer(document.createElement("canvas"));
     }
 
     setDimensions(width: number, height: number): Canvas {
-        if (width != null && height != null) {
-            const newScale = this.scale * width / this.width;
-            this.width = width;
-            this.height = height;
-            this.domElement.width = width;
-            this.domElement.height = height;
-            this.setScale(newScale);
-        }
+        this.width = width;
+        this.height = height;
+        this.htmlElement.width = width;
+        this.htmlElement.height = height;
         return this;
     }
 
     setScale(scale: number): Canvas {
-        this.scale = scale || 1;
         this.resetTransform();
-        this.ctx.scale(this.scale, this.scale);
+        this.transform(new Transform(
+            this.currentTransform.dx,
+            this.currentTransform.dy,
+            scale || 1.0
+        ));
         this.setFont(this.font);
         return this;
     }
 
     setFont(font: Font): Canvas {
-        this.font = font || defaultCanvasFont;
+        this.font = font || DEFAULT_FONT;
         this.ctx.font = this.font.toString();
         return this;
     }
@@ -112,8 +111,9 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     transform(transform: Transform) {
-        this.setScale(transform.scale);
+        this.ctx.scale(transform.scale, transform.scale);
         this.ctx.translate(transform.dx, transform.dy);
+        this.currentTransform = transform;
     }
 
     /**
@@ -125,13 +125,15 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
      */
     transformTo(shape: Rectangle, target?: Rectangle) {
         target = target || this.shape.translateToOrigin();
-        const scale = Rectangle.getMinScale(shape, target);
-        this.setScale(scale);
-
         const targetShape = Rectangle.fitIntoBounds(shape.clone(), target);
+
+        const scale = Rectangle.getMinScale(shape, target);
         const dx = targetShape.x / scale - shape.x;
         const dy = targetShape.y / scale - shape.y;
-        this.ctx.translate(dx, dy);
+
+        this.transform(new Transform(dx, dy, scale));
+
+        //    console.log(`canvas transformTo: dx=${dx}, dy=${dy}, scale=${scale}`);
     }
 
     resetTransform() {
@@ -259,7 +261,15 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
         this.end();
     }
 
-    strokeOrFill(config: PaintStyle) {
+    applyPaintStyles(config: PaintStyle) {
+        this.ctx.fillStyle = config.fillStyle || this.ctx.fillStyle;
+        this.ctx.strokeStyle = config.strokeStyle || this.ctx.strokeStyle;
+        this.ctx.lineWidth = config.lineWidth || this.ctx.lineWidth;
+        this.ctx.lineCap = config.lineCap || this.ctx.lineCap;
+
+        if (config.font) {
+            this.setFont(config.font);
+        }
         if (config.gradient) {
             const from = config.gradient.direction.from;
             const to = config.gradient.direction.to;
@@ -273,14 +283,14 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
                 config.strokeStyle = gradient;
             }
         }
+    }
+
+    strokeOrFill(config: PaintStyle) {
+        this.applyPaintStyles(config);
         if (config.fillStyle) {
-            this.ctx.fillStyle = config.fillStyle;
             this.ctx.fill();
         }
         if (config.strokeStyle) {
-            this.ctx.lineWidth = config.lineWidth || this.ctx.lineWidth;
-            this.ctx.lineCap = config.lineCap || this.ctx.lineCap;
-            this.ctx.strokeStyle = config.strokeStyle;
             this.ctx.stroke();
         }
     }
@@ -323,30 +333,30 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
             this.ctx.font = font.toString();
         }
         const currentFont = this.ctx.font;
-        if (!this.lineHeights[currentFont]) {
+        if (!this.lineHeight4Font[currentFont]) {
             const temp = document.createElement("div");
             temp.setAttribute("style", "margin: 0px; padding: 0px; font:" + currentFont);
             temp.innerHTML = ".";
             document.body.appendChild(temp);
-            this.lineHeights[currentFont] = temp.clientHeight;
+            this.lineHeight4Font[currentFont] = temp.clientHeight;
             temp.parentNode.removeChild(temp);
         }
         this.end();
 
-        return this.lineHeights[currentFont];
+        return this.lineHeight4Font[currentFont];
     }
 
     drawImage(img: Img, shape: Rectangle) {
         if (!img) { return; }
 
-        if (!img.domElement.crossOrigin
-            || img.domElement.crossOrigin.toLowerCase() !== "Anonymous".toLowerCase()) {
+        if (!img.htmlElement.crossOrigin
+            || img.htmlElement.crossOrigin.toLowerCase() !== "Anonymous".toLowerCase()) {
             throw new Error("img.crossOrigin not set to 'Anonymous'")
         }
 
         this.begin();
         this.ctx.drawImage(
-            img.domElement,
+            img.htmlElement,
             shape.x,
             shape.y,
             shape.width,
@@ -370,10 +380,10 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
      * @param clientY
      */
     getCanvasPositionFromMousePosition(clientX: number, clientY: number): Point {
-        const x = clientX - this.domElement.getBoundingClientRect().left;
-        const y = clientY - this.domElement.getBoundingClientRect().top;
+        const x = clientX - this.htmlElement.getBoundingClientRect().left;
+        const y = clientY - this.htmlElement.getBoundingClientRect().top;
 
-        return new Point(x / this.scale, y / this.scale);
+        return new Point(x / this.scale, y / this.scale).translate(-this.currentTransform.dx, -this.currentTransform.dy);
     }
 
     /**
@@ -384,8 +394,8 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
      * @param y
      */
     getDomPositionFromCanvasPosition(x: number, y: number): Point {
-        const clientX = x * this.scale + this.domElement.getBoundingClientRect().left;
-        const clientY = y * this.scale + this.domElement.getBoundingClientRect().top;
+        const clientX = x * this.scale + this.htmlElement.getBoundingClientRect().left;
+        const clientY = y * this.scale + this.htmlElement.getBoundingClientRect().top;
 
         return new Point(clientX, clientY);
     }

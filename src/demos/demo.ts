@@ -3,11 +3,13 @@ import { createButtonDemo } from "./button-demo";
 import { createCanvasDemo } from "./canvas-demo";
 import { createInputDemo } from "./input-demo";
 import { createSelectDemo } from "./select-demo";
+import { createCanvasResizeDemo } from "./canvas-resize-demo";
 
 export function runDemo() {
 
-    const demo = new Div("demo")
-        .append(`
+
+  const demo = Div.create({ container: "demo" })
+    .append(`
             <ul>
               <li>You can <strong>create</strong> a DomElement
                 <ul>
@@ -27,12 +29,13 @@ export function runDemo() {
             </ul>
           `);
 
-    demo.append(createInputDemo());
-    demo.append(createSelectDemo());
-    demo.append(createButtonDemo());
-    demo.append(createCanvasDemo());
+  demo.append(createInputDemo());
+  demo.append(createSelectDemo());
+  demo.append(createButtonDemo());
+  demo.append(createCanvasDemo());
+  demo.append(createCanvasResizeDemo());
 
-    demo.append("Other DomElements are <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Div.ts'>Div.ts</a>")
-        .append(",  <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Img.ts'>Img.ts</a>")
-        .append(" and <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/TextArea.ts'>TextArea.ts</a>");
+  demo.append("Other DomElements are <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Div.ts'>Div.ts</a>")
+    .append(",  <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Img.ts'>Img.ts</a>")
+    .append(" and <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/TextArea.ts'>TextArea.ts</a>");
 }

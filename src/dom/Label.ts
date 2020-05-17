@@ -7,7 +7,7 @@ export interface LabelDomElementConfig extends DomElementConfig, StyleClassConfi
 
 export class Label extends DomElement<HTMLLabelElement> {
 
-    domElement: HTMLLabelElement;
+    htmlElement: HTMLLabelElement;
 
     public static create(config?: LabelDomElementConfig) {
         return config
@@ -22,19 +22,19 @@ export class Label extends DomElement<HTMLLabelElement> {
         styleClass?: string,
     ) {
         super(container);
-        this.domElement = this.createLabelElement();
+        this.htmlElement = this.createLabelElement();
         this.text = text;
         if (htmlFor) {
-            this.domElement.htmlFor = htmlFor;
+            this.htmlElement.htmlFor = htmlFor;
         }
         this.class = styleClass;
     }
 
     protected createLabelElement(): HTMLLabelElement {
-        return this.domElement = this.appendToContainer(document.createElement("label"));
+        return this.htmlElement = this.appendToContainer(document.createElement("label"));
     }
 
     set text(text: string) {
-        this.domElement.innerText = text || "";
+        this.htmlElement.innerText = text || "";
     }
 }

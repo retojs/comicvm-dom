@@ -10,7 +10,7 @@ export interface ImgDomElementConfig extends DomElementConfig, StyleClassConfig 
 
 export class Img extends DomElement<HTMLImageElement> {
 
-    domElement: HTMLImageElement;
+    htmlElement: HTMLImageElement;
 
     bounds: Rectangle;
     bitmapShape: Rectangle;
@@ -31,8 +31,8 @@ export class Img extends DomElement<HTMLImageElement> {
         super(container);
         this.createImgElement();
 
-        this.domElement.src = src;
-        this.domElement.crossOrigin = "Anonymous";
+        this.htmlElement.src = src;
+        this.htmlElement.crossOrigin = "Anonymous";
 
         if (width && height) {
             this.bounds = new Rectangle(0, 0, width, height);
@@ -41,14 +41,14 @@ export class Img extends DomElement<HTMLImageElement> {
         this.class = styleClass;
 
         this.onLoad = () => {
-            if (!this.domElement.width) {
+            if (!this.htmlElement.width) {
                 console.log("Image has no size!? ", this.src);
             }
-            this.bitmapShape = new Rectangle(0, 0, this.domElement.width, this.domElement.height);
+            this.bitmapShape = new Rectangle(0, 0, this.htmlElement.width, this.htmlElement.height);
             if (this.bounds) {
                 const shape = Rectangle.fitIntoBounds(this.bitmapShape.clone(), this.bounds);
-                this.domElement.width = shape.width;
-                this.domElement.height = shape.height;
+                this.htmlElement.width = shape.width;
+                this.htmlElement.height = shape.height;
             }
         };
 
@@ -56,18 +56,18 @@ export class Img extends DomElement<HTMLImageElement> {
     }
 
     get src(): string {
-        return this.domElement.src;
+        return this.htmlElement.src;
     }
 
     set src(src: string) {
-        this.domElement.src = src;
+        this.htmlElement.src = src;
     }
 
     set onLoad(onLoad: EventListener) {
-        this.domElement.addEventListener("load", onLoad);
+        this.htmlElement.addEventListener("load", onLoad);
     }
 
     protected createImgElement(): HTMLImageElement {
-        return this.domElement = this.appendToContainer(document.createElement("img"));
+        return this.htmlElement = this.appendToContainer(document.createElement("img"));
     }
 }

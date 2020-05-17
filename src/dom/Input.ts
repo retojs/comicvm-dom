@@ -1,7 +1,8 @@
-import { DomElement, DomElementContainer, DomElementConfig, StyleClassConfig } from "./DomElement";
+import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 
 export const enum InputType {
     TEXT = "text",
+    NUMBER = "number",
     BUTTON = "button",
     CHECKBOX = "checkbox",
     RADIO = "radio",
@@ -20,7 +21,7 @@ export interface InputDomElementConfig extends DomElementConfig, StyleClassConfi
 
 export class Input extends DomElement<HTMLInputElement> {
 
-    domElement: HTMLInputElement;
+    htmlElement: HTMLInputElement;
     static create(config?: InputDomElementConfig) {
         return config
             ? new Input(config.container, config.type, config.name, config.value, config.placeholder, config.styleClass)
@@ -37,18 +38,18 @@ export class Input extends DomElement<HTMLInputElement> {
     ) {
         super(container);
         this.createInputElement();
-        this.domElement.type = type;
-        this.domElement.name = name;
-        this.domElement.value = value || "";
-        this.domElement.placeholder = placeholder;
+        this.htmlElement.type = type;
+        this.htmlElement.name = name;
+        this.htmlElement.value = value || "";
+        this.htmlElement.placeholder = placeholder || "";
         this.class = styleClass;
     }
 
     protected createInputElement(): HTMLInputElement {
-        return this.domElement = this.appendToContainer(document.createElement("input"));
+        return this.htmlElement = this.appendToContainer(document.createElement("input"));
     }
 
     get value() {
-        return this.domElement.value;
+        return this.htmlElement.value;
     }
 }

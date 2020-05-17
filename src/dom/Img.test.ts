@@ -11,12 +11,12 @@ describe("Img", () => {
             "style-class"
         );
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.src).toContain("image-src");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.src).toContain("image-src");
         expect(btn.bounds).toBeDefined();
         expect(btn.bounds.width).toBe(300);
         expect(btn.bounds.height).toBe(200);
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created with config", () => {
@@ -28,23 +28,23 @@ describe("Img", () => {
             styleClass: "style-class",
         });
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.src).toContain("image-src");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.src).toContain("image-src");
         expect(btn.bounds).toBeDefined();
         expect(btn.bounds.width).toBe(300);
         expect(btn.bounds.height).toBe(200);
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created without config", () => {
         const btn = Img.create();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 
     it("can be created without constructor arguments", () => {
         const btn = new Img();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 });

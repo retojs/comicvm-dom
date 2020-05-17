@@ -8,7 +8,7 @@ export interface ButtonDomElementConfig extends DomElementConfig, StyleClassConf
 
 export class Button extends DomElement<HTMLButtonElement> {
 
-    domElement: HTMLButtonElement;
+    htmlElement: HTMLButtonElement;
 
     public static create(config?: ButtonDomElementConfig): Button {
         return config
@@ -24,16 +24,16 @@ export class Button extends DomElement<HTMLButtonElement> {
     ) {
         super(container);
         this.appendToContainer(this.createButtonElement(label));
-        this.domElement.innerText = label;
+        this.htmlElement.innerText = label;
         this.onClick = onClick;
         this.class = styleClass;
     }
 
     protected createButtonElement(label: string): HTMLButtonElement {
-        return this.domElement = document.createElement("button");
+        return this.htmlElement = document.createElement("button");
     }
 
     set label(label: string) {
-        this.domElement.innerText = label;
+        this.htmlElement.innerText = label;
     }
 }

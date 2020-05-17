@@ -8,7 +8,7 @@ export interface TextAreaDomElementConfig extends DomElementConfig, StyleClassCo
 
 export class TextArea extends DomElement<HTMLTextAreaElement> {
 
-    domElement: HTMLTextAreaElement;
+    htmlElement: HTMLTextAreaElement;
 
     public static create(config?: TextAreaDomElementConfig): TextArea {
         return config
@@ -24,18 +24,18 @@ export class TextArea extends DomElement<HTMLTextAreaElement> {
         styleClass?: string,
     ) {
         super(container);
-        this.domElement = this.createTextAreaElement();
-        this.domElement.cols = cols != null ? cols : 1;
-        this.domElement.rows = rows != null ? rows : 1;
+        this.htmlElement = this.createTextAreaElement();
+        this.htmlElement.cols = cols != null ? cols : 1;
+        this.htmlElement.rows = rows != null ? rows : 1;
         this.text = text;
         this.class = styleClass;
     }
 
     protected createTextAreaElement(): HTMLTextAreaElement {
-        return this.domElement = this.appendToContainer(document.createElement("textarea"));
+        return this.htmlElement = this.appendToContainer(document.createElement("textarea"));
     }
 
     set text(text: string) {
-        this.domElement.innerText = text || "";
+        this.htmlElement.innerText = text || "";
     }
 }

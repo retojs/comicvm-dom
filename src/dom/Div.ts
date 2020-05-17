@@ -4,7 +4,7 @@ export interface DivDomElementConfig extends DomElementConfig, StyleClassConfig 
 
 export class Div extends DomElement<HTMLDivElement> {
 
-    domElement: HTMLDivElement;
+    htmlElement: HTMLDivElement;
 
     public static create(config?: DivDomElementConfig): Div {
         return config
@@ -17,11 +17,11 @@ export class Div extends DomElement<HTMLDivElement> {
         styleClass?: string,
     ) {
         super(container);
-        this.domElement = this.appendToContainer(this.createDivElement(styleClass));
+        this.htmlElement = this.appendToContainer(this.createDivElement(styleClass));
         this.class = styleClass;
     }
 
     protected createDivElement(styleClass: string): HTMLDivElement {
-        return this.domElement = document.createElement("div");
+        return this.htmlElement = document.createElement("div");
     }
 }

@@ -6,7 +6,7 @@ export interface SelectDomElementConfig extends DomElementConfig, StyleClassConf
 
 export class Select extends DomElement<HTMLSelectElement> {
 
-    domElement: HTMLSelectElement;
+    htmlElement: HTMLSelectElement;
 
     public static create(config?: SelectDomElementConfig) {
         return config
@@ -26,21 +26,21 @@ export class Select extends DomElement<HTMLSelectElement> {
     }
 
     protected createSelectElement(): HTMLSelectElement {
-        return this.domElement = this.appendToContainer(document.createElement("select"));
+        return this.htmlElement = this.appendToContainer(document.createElement("select"));
     }
 
     set options(options: string[]) {
-        this.domElement.innerHTML = (options || [])
+        this.htmlElement.innerHTML = (options || [])
             .map(option => `<option value="${option}">${option}</option>`)
             .join('');
     }
 
     set selectedOption(option: string) {
-        this.domElement.value = option;
+        this.htmlElement.value = option;
     }
 
     get selectedOption(): string {
-        return this.domElement.options[this.domElement.selectedIndex].value;
+        return this.htmlElement.options[this.htmlElement.selectedIndex].value;
     }
 
     get value(): string {

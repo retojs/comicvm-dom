@@ -35,16 +35,18 @@ export interface PaintStyleConfig {
 export class PaintStyle {
 
     static create(config: PaintStyleConfig) {
-        return new PaintStyle(
-            config.fillStyle,
-            config.strokeStyle,
-            config.lineWidth,
-            config.lineCap,
-            config.font,
-            config.textAlign,
-            config.gradient,
-            config.enabled
-        );
+        return config
+            ? new PaintStyle(
+                config.fillStyle,
+                config.strokeStyle,
+                config.lineWidth,
+                config.lineCap,
+                config.font,
+                config.textAlign,
+                config.gradient,
+                config.enabled
+            )
+            : new PaintStyle();
     }
 
     private constructor(
@@ -84,6 +86,10 @@ export class PaintStyle {
         return new PaintStyle(null, null, lineWidth, null, null, null,
             { type, colors, direction, fill: false, stroke: true }
         );
+    }
+
+    static font(font: Font) {
+        return new PaintStyle(null, null, null, null, font);
     }
 
     clone(): PaintStyle {

@@ -11,11 +11,11 @@ describe("TextArea", () => {
             "style-class",
         );
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.cols).toBe(7);
-        expect(btn.domElement.rows).toBe(8);
-        expect(btn.domElement.innerText).toBe("text");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.cols).toBe(7);
+        expect(btn.htmlElement.rows).toBe(8);
+        expect(btn.htmlElement.innerText).toBe("text");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created with config", () => {
@@ -27,22 +27,22 @@ describe("TextArea", () => {
             styleClass: "style-class",
         });
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.cols).toBe(7);
-        expect(btn.domElement.rows).toBe(8);
-        expect(btn.domElement.innerText).toBe("text");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.cols).toBe(7);
+        expect(btn.htmlElement.rows).toBe(8);
+        expect(btn.htmlElement.innerText).toBe("text");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created without config", () => {
         const btn = TextArea.create();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 
     it("can be created without constructor arguments", () => {
         const btn = new TextArea();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 });

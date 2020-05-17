@@ -10,10 +10,10 @@ describe("Label", () => {
             "style-class",
         );
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.innerText).toBe("label-text");
-        expect(btn.domElement.htmlFor).toBe("for-element-id");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.innerText).toBe("label-text");
+        expect(btn.htmlElement.htmlFor).toBe("for-element-id");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created with config", () => {
@@ -24,21 +24,21 @@ describe("Label", () => {
             styleClass: "style-class",
         });
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
-        expect(btn.domElement.innerText).toBe("label-text");
-        expect(btn.domElement.htmlFor).toBe("for-element-id");
-        expect(btn.domElement.classList).toContain("style-class");
+        expect(btn.htmlElement).toBeDefined();
+        expect(btn.htmlElement.innerText).toBe("label-text");
+        expect(btn.htmlElement.htmlFor).toBe("for-element-id");
+        expect(btn.htmlElement.classList).toContain("style-class");
     });
 
     it("can be created without config", () => {
         const btn = Label.create();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 
     it("can be created without constructor arguments", () => {
         const btn = new Label();
         expect(btn).toBeDefined();
-        expect(btn.domElement).toBeDefined();
+        expect(btn.htmlElement).toBeDefined();
     });
 });

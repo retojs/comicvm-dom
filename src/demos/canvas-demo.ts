@@ -10,8 +10,7 @@ export function createCanvasDemo(): Div {
     const canvas = Canvas.create({
         width: 300,
         height: 200,
-        scale: 1.0,
-        font: new Font(30, "Arial"),
+        paintStyleConfig: { font: new Font(30, "Arial") },
     })
 
     canvas.circle(new Point(150, 100), 80, PaintStyle.stroke("magenta"));

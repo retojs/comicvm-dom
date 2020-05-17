@@ -1,5 +1,7 @@
 import { Rectangle } from "@comicvm-geometry-2d/Rectangle";
 import { Dimensions } from "@comicvm-geometry-2d/Dimensions";
+import { Observable, fromEvent, BehaviorSubject, Subject, ReplaySubject } from "rxjs";
+import { requestInit } from "./requestInit";
 
 
 export type DomElementContainer = HTMLElement | DomElement<HTMLElement> | string;
@@ -15,7 +17,7 @@ export interface StyleClassConfig {
 
 export abstract class DomElement<T extends HTMLElement> {
 
-    abstract domElement: T;
+    abstract htmlElement: T;
 
     private container: HTMLElement;
 
@@ -24,67 +26,80 @@ export abstract class DomElement<T extends HTMLElement> {
             if (typeof container === "string") {
                 container = document.getElementById(container);
             } else if (container instanceof DomElement) {
-                container = container.domElement;
+                container = container.htmlElement;
             }
             this.container = container;
         }
     }
 
-    protected appendToContainer<T extends HTMLElement>(element: T): T {
+    protected appendToContainer<T extends HTMLElement>(htmlElement: T): T {
         if (this.container) {
-            this.container.appendChild(element);
+            this.container.appendChild(htmlElement);
         }
-        return element;
+        return requestInit(htmlElement) as T;
     }
 
     append(content: DomElementContent) {
         if (content) {
             if (typeof content === "string") {
-                this.domElement.insertAdjacentHTML('beforeend', content);
+                this.htmlElement.insertAdjacentHTML('beforeend', content);
             } else if (content instanceof DomElement) {
-                this.domElement.appendChild((content as DomElement<HTMLElement>).domElement);
+                this.htmlElement.appendChild((content as DomElement<HTMLElement>).htmlElement);
             } else {
-                this.domElement.appendChild(content);
+                this.htmlElement.appendChild(content);
             }
         }
+        requestInit(this.htmlElement);
         return this;
     }
 
+    focus() {
+        this.htmlElement.focus();
+    }
+
+    get onKeyDown$(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(this.htmlElement, 'keydown');
+    }
+
+    get onKeyUp$(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(this.htmlElement, 'keyup');
+    }
+
     clear() {
-        this.domElement.innerHTML = "";
+        this.htmlElement.innerHTML = "";
     }
 
     set class(styleClass: string) {
         if (styleClass) {
             styleClass.split(" ").forEach(name =>
-                this.domElement.classList.add(name)
+                this.htmlElement.classList.add(name)
             )
         }
     }
 
     removeClass(styleClass: string) {
-        this.domElement.classList.remove(styleClass);
+        this.htmlElement.classList.remove(styleClass);
     }
 
     get clientOffset(): [number, number] {
-        const clientRect = this.domElement.getBoundingClientRect();
+        const clientRect = this.htmlElement.getBoundingClientRect();
         return [clientRect.left, clientRect.top];
     }
 
     get clientOffsetInv(): [number, number] {
-        const clientRect = this.domElement.getBoundingClientRect();
+        const clientRect = this.htmlElement.getBoundingClientRect();
         return [-clientRect.left, -clientRect.top];
     }
 
     get parentOffset(): [number, number] {
         return [
-            this.domElement.offsetLeft,
-            this.domElement.offsetTop
+            this.htmlElement.offsetLeft,
+            this.htmlElement.offsetTop
         ];
     }
 
     get borderWidth(): string {
-        return window.getComputedStyle(this.domElement).getPropertyValue('border-width');
+        return window.getComputedStyle(this.htmlElement).getPropertyValue('border-width');
     }
 
     get shape(): Rectangle {
@@ -92,14 +107,14 @@ export abstract class DomElement<T extends HTMLElement> {
     }
 
     set shape(shape: Rectangle) {
-        this.domElement.style.left = shape.x + "px";
-        this.domElement.style.top = shape.y + "px";
-        this.domElement.style.width = shape.width + "px";
-        this.domElement.style.height = shape.height + "px";
+        this.htmlElement.style.left = shape.x + "px";
+        this.htmlElement.style.top = shape.y + "px";
+        this.htmlElement.style.width = shape.width + "px";
+        this.htmlElement.style.height = shape.height + "px";
     }
 
     get dimensions(): Dimensions {
-        const clientRect = this.domElement.getBoundingClientRect();
+        const clientRect = this.htmlElement.getBoundingClientRect();
         const borderWidth: number = parseInt(this.borderWidth);
         return new Dimensions(
             clientRect.width - 2 * borderWidth,
@@ -107,61 +122,65 @@ export abstract class DomElement<T extends HTMLElement> {
         );
     }
 
+    set onInit(onInit: EventListener) {
+        this.htmlElement.addEventListener("init", onInit);
+    }
+
     set onClick(onClick: EventListener) {
-        this.domElement.addEventListener("click", onClick);
+        this.htmlElement.addEventListener("click", onClick);
     }
 
     set onDblClick(onDblClick: EventListener) {
-        this.domElement.addEventListener("dblclick", onDblClick);
+        this.htmlElement.addEventListener("dblclick", onDblClick);
     }
 
     set onMouseDown(onMouseDown: EventListener) {
-        this.domElement.addEventListener("mousedown", onMouseDown);
+        this.htmlElement.addEventListener("mousedown", onMouseDown);
     }
 
     set onMouseUp(onMouseUp: EventListener) {
-        this.domElement.addEventListener("mouseup", onMouseUp);
+        this.htmlElement.addEventListener("mouseup", onMouseUp);
     }
 
     set onMouseMove(onMouseMove: EventListener) {
-        this.domElement.addEventListener("mousemove", onMouseMove);
+        this.htmlElement.addEventListener("mousemove", onMouseMove);
     }
 
     set onMouseEnter(onMouseEnter: EventListener) {
-        this.domElement.addEventListener("mouseenter", onMouseEnter);
+        this.htmlElement.addEventListener("mouseenter", onMouseEnter);
     }
 
     set onMouseLeave(onMouseLeave: EventListener) {
-        this.domElement.addEventListener("mouseleave", onMouseLeave);
+        this.htmlElement.addEventListener("mouseleave", onMouseLeave);
     }
 
     set onChange(onChange: EventListener) {
-        this.domElement.addEventListener("change", onChange);
+        this.htmlElement.addEventListener("change", onChange);
     }
 
     set onKeyUp(onKeyUp: EventListener) {
-        this.domElement.addEventListener("keyup", onKeyUp);
+        this.htmlElement.addEventListener("keyup", onKeyUp);
     }
 
     set onKeyDown(onKeyDown: EventListener) {
-        this.domElement.addEventListener("keydown", onKeyDown);
+        this.htmlElement.addEventListener("keydown", onKeyDown);
     }
 
     set onDrop(onDrop: EventListener) {
 
-        this.domElement.ondragover = (event: DragEvent) => {
+        this.htmlElement.ondragover = (event: DragEvent) => {
             if (isFileDragged(event)) {
                 event.preventDefault(); // prerequisite for the drop event to be called
             }
         };
 
-        this.domElement.ondragenter = (event: DragEvent) => {
+        this.htmlElement.ondragenter = (event: DragEvent) => {
             if (isFileDragged(event)) {
                 event.preventDefault(); // prerequisite for the drop event to be called
             }
         };
 
-        this.domElement.ondrop = (event: DragEvent) => {
+        this.htmlElement.ondrop = (event: DragEvent) => {
             if (event.stopPropagation) {
                 event.stopPropagation(); // stops the browser from redirecting.
             }
@@ -175,7 +194,7 @@ export abstract class DomElement<T extends HTMLElement> {
     }
 
     disableDrag() {
-        this.domElement.ondragstart = (event: DragEvent) => {
+        this.htmlElement.ondragstart = (event: DragEvent) => {
             event.preventDefault();
         }
     }
