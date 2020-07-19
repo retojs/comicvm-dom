@@ -1,9 +1,7 @@
-import { DomElementContainer, DomElement } from "./DomElement";
-import { Margin } from "@comicvm-geometry-2d/Margin";
-import { Input, InputDomElementConfig } from "./Input";
-
-import { fromEvent, interval } from 'rxjs';
-import { tap, switchMap, takeUntil, filter, map, debounce, debounceTime } from 'rxjs/operators';
+import {DomElement} from "./DomElement";
+import {Input, InputDomElementConfig} from "./Input";
+import {interval, of} from 'rxjs';
+import {debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 export type ParameterListener<T> = (value: T) => void;
 
@@ -59,7 +57,6 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
         super(null);
         this.htmlElement = document.createElement("span");
         this.htmlElement.appendChild(input.htmlElement);
-        //    this.setupKeyboardListeners(onKeyUp);
         this.setupKeyboardListenersRxJs(onKeyUp)
     }
 
@@ -71,136 +68,54 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
         this.input.htmlElement.value = value;
     }
 
+    setupKeyboardListenersRxJs(onChange: ParameterListener<string>) {
+        let isKeydown = false;
+
+        const keyUp$ = this.input.onKeyUp$.pipe(
+            filter((e) => isArrowKeyPressed(e)),
+            tap(() => isKeydown = false),
+        );
+
+        const keyDown$ = this.input.onKeyDown$.pipe(
+            filter((e) => isArrowKeyPressed(e)),
+            tap((e: KeyboardEvent) => e.preventDefault()),
+            // If you keep a key pressed, many keyboard events are emitted,
+            // but we are only interested in the first one.
+            filter(() => !isKeydown),
+            tap(() => isKeydown = true),
+            // after a short delay start emitting events in regular intervals...
+            debounceTime(300),
+            switchMap(e => {
+                    if (isKeydown) {
+                        return interval(ARROW_KEY_CONFIG.repeatInterval).pipe(
+                            // until the key is not pressed anymore
+                            takeUntil(this.input.onKeyUp$),
+                            // emit the initial event object each time
+                            map(i => e),
+                        )
+                    } else {
+                        return of(undefined);
+                    }
+                }
+            ),
+        );
+
+        const onInputChanged = e => {
+            if (e) {
+                this.value = this.getIncrementedValue(e);
+                onChange(this.value);
+            }
+        }
+
+        keyUp$.subscribe(onInputChanged);
+        keyDown$.subscribe(onInputChanged);
+    }
+
     focus() {
         this.input.focus();
     }
 
-    setupKeyboardListenersRxJs(onChange: ParameterListener<string>) {
-        let isCtrlPressed = false;
-        this.input.onKeyDown$.subscribe(e => {
-            isCtrlPressed = e.code === "Ctrl";
-            e.preventDefault();
-            console.log('ctrl pressed', isCtrlPressed);
-        })
-        this.input.onKeyUp$.subscribe(e => {
-            isCtrlPressed = !(e.code === "Ctrl");
-            e.preventDefault();
-            console.log('ctrl pressed', isCtrlPressed);
-        })
-
-        let isKeydown = false;
-        this.input.onKeyUp$.subscribe(() => isKeydown = false);
-        this.input.onKeyDown$.pipe(
-
-            // If you keep a key pressed, many keyboard events are emitted,
-            // but we are only interested in the first one. 
-            filter(() => !isKeydown),
-            tap(() => isKeydown = true),
-            // We are only interested in arrow keys.
-            filter((e) => isArrowKeyPressed(e)),
-            tap((e: KeyboardEvent) => e.preventDefault()),
-            debounceTime(300),
-            // start emitting events in regular intervals...
-            switchMap(e => interval(ARROW_KEY_CONFIG.repeatInterval).pipe(
-                // until the key is not pressed anymore.
-                takeUntil(this.input.onKeyUp$),
-                map(i => e),
-            )
-            ),
-        ).subscribe(e => {
-            this.value = this.getIncrementedValue(e, isCtrlPressed);
-            console.log('new value', this.value);
-            console.log('ctrl pressed', isCtrlPressed);
-            onChange(this.value);
-        });
-
-
-    }
-
-
-    /**
-     * Feature:
-     *
-     *   * Keeping any of the arrow keys pressed should increase or decrease the parameter value in a regular speed.
-     *   * The increment should match the incremented value to get a smooth increase
-     *      i.e. the increment should be reasonably small relative to the current value
-     *   * Pressing the CTRL key should produce a faster increase.
-     *
-     * Concept of Implementation:
-     *
-     *   - the flag isRepeatingKeyDown indicates if a regular increment is in progress
-     *   - on keydown
-     *      - this flag is set to true
-     *      - the method startRepeatKeyDown starts a loop calling repeatKeyDown in each iteration
-     *   - on keyup
-     *      - this flag is set to false
-     *      - the method stopRepeatingKeyDown stops the loop
-     *
-     *   - In each step of the repeatKeyDown loop
-     *      - the incremented value is calculated in the method getIncrementedValue.
-     *      - the increment size depends on
-     *          - the arrow key (up/right = increase, down/left = decrease)
-     *          - the Ctrl key (larger increment if Ctrl is pressed)
-     *          - the current value (smaller increment if value is smaller than Config.isSmallValue())
-     *      - the incremented value is passed to the change listener
-     *      - the next iteration is initiated if looping has not been stopped through the flag mentioned above.
-     *
-     * @param onChange: the change listener to be notified of a new value
-     */
-
-    private lastKeyUp: number;
-    private arrowKeyTimeoutId: any;
-    private isRepeatingKeyDown = false;
-
-    setupKeyboardListeners(onChange: ParameterListener<string>) {
-        this.input.onKeyDown = (event: KeyboardEvent) => {
-            if (isArrowKeyPressed(event) && !this.isRepeatingKeyDown) {
-                this.startRepeatingKeyDown(event, onChange);
-            }
-        };
-        this.input.onKeyUp = (event: KeyboardEvent) => {
-            if (this.isRepeatingKeyDown) {
-                this.stopRepeatingKeyDown();
-                this.value = this.getIncrementedValue(event, event.code === "Ctrl");
-                onChange(this.value);
-            } else {
-                this.getDebounced(onChange)(event);
-            }
-        }
-    }
-
-    startRepeatingKeyDown(event: KeyboardEvent, onChange: ParameterListener<string>) {
-        this.isRepeatingKeyDown = true;
-        this.arrowKeyTimeoutId = setTimeout(
-            () => this.repeatKeyDown(event, onChange),
-            ARROW_KEY_CONFIG.debounceInterval
-        );
-    }
-
-    stopRepeatingKeyDown() {
-        this.isRepeatingKeyDown = false;
-        this.stopArrowKeyTimeout();
-    }
-
-    stopArrowKeyTimeout() {
-        clearTimeout(this.arrowKeyTimeoutId);
-        this.arrowKeyTimeoutId = null;
-    }
-
-    repeatKeyDown(event: KeyboardEvent, onChange: ParameterListener<string>) {
-        this.value = this.getIncrementedValue(event, event.code === "Ctrl");
-        onChange(this.value);
-
-        this.stopArrowKeyTimeout();
-        if (this.isRepeatingKeyDown) {
-            this.arrowKeyTimeoutId = setTimeout(
-                () => this.repeatKeyDown(event, onChange),
-                ARROW_KEY_CONFIG.repeatInterval
-            );
-        }
-    }
-
-    getIncrementedValue(event: KeyboardEvent, isCtrlPressed: boolean): string {
+    getIncrementedValue(event: KeyboardEvent): string {
         if (!this.value) {
             return this.value;
         }
@@ -210,7 +125,7 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
             ? ARROW_KEY_CONFIG.smallValues
             : ARROW_KEY_CONFIG.largeValues;
 
-        const inc = isCtrlPressed
+        const inc = event.ctrlKey
             ? incConfig.incrementCtrlKey
             : incConfig.increment;
 
@@ -228,24 +143,6 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
         } else {
             return this.value;
         }
-    }
-
-    /**
-     * Returns a debounced version of the specified change listener.
-     * The debounced version only calls the change listener after the user has stopped typing for a certain amount of time.
-     * @param onChange
-     */
-    getDebounced(onChange: ParameterListener<string>) {
-        return (event: KeyboardEvent) => {
-            if (!isArrowKeyPressed(event)) {
-                this.lastKeyUp = Date.now();
-                setTimeout(() => {
-                    if (Date.now() >= this.lastKeyUp + ARROW_KEY_CONFIG.debounceInterval) {
-                        onChange(this.value);
-                    }
-                }, ARROW_KEY_CONFIG.debounceInterval);
-            }
-        };
     }
 }
 
