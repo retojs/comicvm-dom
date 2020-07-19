@@ -36,7 +36,6 @@ export function createCanvasResizeDemo(): Div {
         onKeyUp: repaint
     });
 
-    // widthInput.onInit$.subscribe(() => widthInput.focus());
     widthInput.onInit = () => widthInput.focus();
 
     function paintOnCanvas(canvas: Canvas, text: string) {
