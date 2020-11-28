@@ -1,6 +1,6 @@
-import { Rectangle } from "@comicvm-geometry-2d/Rectangle";
-import { Dimensions } from "@comicvm-geometry-2d/Dimensions";
-import { Observable, fromEvent, BehaviorSubject, Subject, ReplaySubject } from "rxjs";
+import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { Dimensions } from "comicvm-geometry-2d/src/geometry-2d/Dimensions";
+import { fromEvent, Observable } from "rxjs";
 import { requestInit } from "./requestInit";
 
 

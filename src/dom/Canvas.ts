@@ -1,8 +1,8 @@
-import { Line } from "@comicvm-geometry-2d/Line";
-import { Margin } from "@comicvm-geometry-2d/Margin";
-import { Point } from "@comicvm-geometry-2d/Point";
-import { Rectangle } from "@comicvm-geometry-2d/Rectangle";
-import { Transform } from "@comicvm-geometry-2d/Transform";
+import { Line } from "comicvm-geometry-2d/src/geometry-2d/Line";
+import { Margin } from "comicvm-geometry-2d/src/geometry-2d/Margin";
+import { Point } from "comicvm-geometry-2d/src/geometry-2d/Point";
+import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { Transform } from "comicvm-geometry-2d/src/geometry-2d/Transform";
 import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 import { Img } from "./Img";
 import { Font } from "./util/Font";
@@ -157,7 +157,7 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     circle(origin: Point, radius: number, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
 
         this.begin();
         this.ctx.beginPath();
@@ -175,7 +175,7 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     lineXY(fromX: number, fromY: number, toX: number, toY: number, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
 
         this.begin();
         this.ctx.lineWidth = config.lineWidth || this.ctx.lineWidth;
@@ -187,7 +187,7 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     bezier(from: Point, to: Point, cp: Point, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
 
         this.begin();
         this.ctx.lineWidth = config.lineWidth || this.ctx.lineWidth;
@@ -199,7 +199,8 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     rect(rectangle: Rectangle, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
+
 
         this.begin();
         this.ctx.beginPath();
@@ -209,7 +210,8 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     roundRect(rectangle: Rectangle, radius: Margin, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
+
         this.begin();
         this.ctx.beginPath();
         this.ctx.moveTo(
@@ -296,7 +298,7 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     text(text: string, pos: Point, config: PaintStyle) {
-        if (!config.enabled) { return; }
+        if (!config.enabled) return;
 
         this.begin();
         if (config.fillStyle) {
@@ -347,7 +349,7 @@ export class Canvas extends DomElement<HTMLCanvasElement> {
     }
 
     drawImage(img: Img, shape: Rectangle) {
-        if (!img) { return; }
+        if (!img) return;
 
         if (!img.htmlElement.crossOrigin
             || img.htmlElement.crossOrigin.toLowerCase() !== "Anonymous".toLowerCase()) {

@@ -1,13 +1,13 @@
-import {Dimensions} from "@comicvm-geometry-2d/Dimensions";
-import {Point} from "@comicvm-geometry-2d/Point";
-import {Rectangle} from "@comicvm-geometry-2d/Rectangle";
-import {Canvas} from "src/dom/Canvas";
-import {Div} from "src/dom/Div";
-import {InputType} from "src/dom/Input";
-import {InputWithLabel} from "src/dom/InputWithLabel";
-import {Font} from "src/dom/util/Font";
-import {PaintStyle} from "src/dom/util/PaintStyle";
-import {TextAlign} from "src/dom/util/TextAlign";
+import { Dimensions } from "comicvm-geometry-2d/src/geometry-2d/Dimensions";
+import { Point } from "comicvm-geometry-2d/src/geometry-2d/Point";
+import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { Canvas } from "src/dom/Canvas";
+import { Div } from "src/dom/Div";
+import { InputType } from "src/dom/Input";
+import { InputWithLabel } from "src/dom/InputWithLabel";
+import { Font } from "src/dom/util/Font";
+import { PaintStyle } from "src/dom/util/PaintStyle";
+import { TextAlign } from "src/dom/util/TextAlign";
 
 export function createCanvasResizeDemo(): Div {
 

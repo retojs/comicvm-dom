@@ -1,6 +1,6 @@
 import { Font } from "./Font";
 import { TextAlign } from "./TextAlign";
-import { Line } from "@comicvm-geometry-2d/Line";
+import { Line } from "comicvm-geometry-2d/src/geometry-2d/Line";
 
 export const enum LineCap {
     Butt = "butt",

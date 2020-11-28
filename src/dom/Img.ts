@@ -1,6 +1,5 @@
-import { Rectangle } from "@comicvm-geometry-2d/Rectangle";
-import { DomElement, DomElementContainer, DomElementConfig, StyleClassConfig } from "./DomElement";
-import { parseConfigFileTextToJson } from "typescript";
+import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 
 export interface ImgDomElementConfig extends DomElementConfig, StyleClassConfig {
     src?: string;
