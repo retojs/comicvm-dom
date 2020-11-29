@@ -19,7 +19,8 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                loader: 'ts-loader',
+                options: { allowTsInNodeModules: true }
             },
             {
                 test: /\.html/,
