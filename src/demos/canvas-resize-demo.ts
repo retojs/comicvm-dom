@@ -1,6 +1,4 @@
-import { Dimensions } from "comicvm-geometry-2d/src/geometry-2d/Dimensions";
-import { Point } from "comicvm-geometry-2d/src/geometry-2d/Point";
-import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { Dimensions, Point, Rectangle } from "comicvm-geometry-2d";
 import { Canvas } from "src/dom/Canvas";
 import { Div } from "src/dom/Div";
 import { InputType } from "src/dom/Input";
