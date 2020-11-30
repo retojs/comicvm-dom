@@ -1,4 +1,4 @@
-import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
+import { Rectangle } from "comicvm-geometry-2d";
 import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 
 export interface ImgDomElementConfig extends DomElementConfig, StyleClassConfig {

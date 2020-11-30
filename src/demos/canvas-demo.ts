@@ -1,9 +1,9 @@
-import { Point } from "comicvm-geometry-2d/src/geometry-2d/Point";
-import { Canvas } from "src/dom/Canvas";
-import { Div } from "src/dom/Div";
-import { Font } from "src/dom/util/Font";
-import { PaintStyle } from "src/dom/util/PaintStyle";
-import { TextAlign } from "src/dom/util/TextAlign";
+import { Point } from "comicvm-geometry-2d";
+import { Canvas } from "../dom/Canvas";
+import { Div } from "../dom/Div";
+import { Font } from "../dom/util/Font";
+import { PaintStyle } from "../dom/util/PaintStyle";
+import { TextAlign } from "../dom/util/TextAlign";
 
 export function createCanvasDemo(): Div {
 
@@ -53,5 +53,5 @@ canvas.onClick = (e: MouseEvent) => {
 `
             ).append("<a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/demos/canvas-demo.ts'>view source</a>")
         )
-        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Canvas.ts'>Canvas.ts</a> on GitHub");
+        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Canvas.ts'>Canvas.ts</a> on GitHub");
 }

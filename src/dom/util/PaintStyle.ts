@@ -1,6 +1,6 @@
 import { Font } from "./Font";
 import { TextAlign } from "./TextAlign";
-import { Line } from "comicvm-geometry-2d/src/geometry-2d/Line";
+import { Line } from "comicvm-geometry-2d";
 
 export const enum LineCap {
     Butt = "butt",
@@ -58,7 +58,8 @@ export class PaintStyle {
         public textAlign?: TextAlign,
         public gradient?: GradientProperties,
         public enabled: boolean = true
-    ) { }
+    ) {
+    }
 
     static stroke(color: string, lineWidth?: number, lineCap?: LineCap, enabled?: boolean): PaintStyle {
         return new PaintStyle(null, color, lineWidth, lineCap, null, null, null, enabled);
@@ -78,13 +79,13 @@ export class PaintStyle {
 
     static gradientFill(type: GradientType, colors: string[], direction?: Line) {
         return new PaintStyle(null, null, null, null, null, null,
-            { type, colors, direction, fill: true, stroke: false }
+            {type, colors, direction, fill: true, stroke: false}
         );
     }
 
     static gradientStroke(type: GradientType, colors: string[], direction?: Line, lineWidth?: number) {
         return new PaintStyle(null, null, lineWidth, null, null, null,
-            { type, colors, direction, fill: false, stroke: true }
+            {type, colors, direction, fill: false, stroke: true}
         );
     }
 

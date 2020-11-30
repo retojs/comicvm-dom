@@ -35,7 +35,7 @@ export function runDemo() {
   demo.append(createCanvasDemo());
   demo.append(createCanvasResizeDemo());
 
-  demo.append("Other DomElements are <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Div.ts'>Div.ts</a>")
-    .append(",  <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Img.ts'>Img.ts</a>")
-    .append(" and <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/TextArea.ts'>TextArea.ts</a>");
+  demo.append("Other DomElements are <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Div.ts'>Div.ts</a>")
+    .append(",  <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Img.ts'>Img.ts</a>")
+    .append(" and <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/TextArea.ts'>TextArea.ts</a>");
 }

@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "declaration": true,
-    "outDir": "./dist/",
+    "outDir": "dist",
+    "baseUrl": ".",
     "sourceMap": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
@@ -14,7 +16,13 @@
     "lib": [
       "dom",
       "es2016"
-    ],
-    "baseUrl": "."
-  }
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

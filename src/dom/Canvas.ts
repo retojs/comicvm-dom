@@ -1,8 +1,4 @@
-import { Line } from "comicvm-geometry-2d/src/geometry-2d/Line";
-import { Margin } from "comicvm-geometry-2d/src/geometry-2d/Margin";
-import { Point } from "comicvm-geometry-2d/src/geometry-2d/Point";
-import { Rectangle } from "comicvm-geometry-2d/src/geometry-2d/Rectangle";
-import { Transform } from "comicvm-geometry-2d/src/geometry-2d/Transform";
+import { Line, Margin, Point, Rectangle, Transform } from "comicvm-geometry-2d";
 import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 import { Img } from "./Img";
 import { Font } from "./util/Font";

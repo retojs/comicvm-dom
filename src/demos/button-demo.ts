@@ -1,5 +1,5 @@
-import { Div } from "src/dom/Div";
-import { Button } from "src/dom/Button";
+import { Div } from "../dom/Div";
+import { Button } from "../dom/Button";
 
 export function createButtonDemo(): Div {
 
@@ -27,5 +27,5 @@ Div.create({
 `
             ).append("<a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/demos/button-demo.ts'>view source</a>")
         )
-        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Button.ts'>Button.ts</a> on GitHub");
+        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Button.ts'>Button.ts</a> on GitHub");
 }

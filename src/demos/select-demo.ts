@@ -1,6 +1,6 @@
-import { Div } from "src/dom/Div";
-import { Label } from "src/dom/Label";
-import { Select } from "src/dom/Select";
+import { Div } from "../dom/Div";
+import { Label } from "../dom/Label";
+import { Select } from "../dom/Select";
 
 export function createSelectDemo(): Div {
     const select = Select.create({
@@ -31,5 +31,5 @@ select.onChange = (e: Event) => label.text = \`You chose \$\{select.value\}.\`
 `
             ).append("<a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/demos/canvas-demo.ts'>view source</a>")
         )
-        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Select.ts'>Select.ts</a> on GitHub");
+        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Select.ts'>Select.ts</a> on GitHub");
 }

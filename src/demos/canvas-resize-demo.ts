@@ -1,11 +1,11 @@
 import { Dimensions, Point, Rectangle } from "comicvm-geometry-2d";
-import { Canvas } from "src/dom/Canvas";
-import { Div } from "src/dom/Div";
-import { InputType } from "src/dom/Input";
-import { InputWithLabel } from "src/dom/InputWithLabel";
-import { Font } from "src/dom/util/Font";
-import { PaintStyle } from "src/dom/util/PaintStyle";
-import { TextAlign } from "src/dom/util/TextAlign";
+import { Canvas } from "../dom/Canvas";
+import { Div } from "../dom/Div";
+import { InputType } from "../dom/Input";
+import { InputWithLabel } from "../dom/InputWithLabel";
+import { Font } from "../dom/util/Font";
+import { PaintStyle } from "../dom/util/PaintStyle";
+import { TextAlign } from "../dom/util/TextAlign";
 
 export function createCanvasResizeDemo(): Div {
 
@@ -146,6 +146,6 @@ canvasFixed.onClick = createClickHandler(canvasFixed);
 `
             ).append("<a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/demos/canvas-demo.ts'>view source</a>")
         )
-        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/dom/Canvas.ts'>Canvas.ts</a> on GitHub");
+        .append("see <a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/../dom/Canvas.ts'>Canvas.ts</a> on GitHub");
 }
 
