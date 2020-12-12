@@ -1,22 +1,13 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig');
-
 module.exports = {
     roots: [
         "<rootDir>/src"
     ],
 
-    modulePaths: [
-        "<rootDir>/comicvm-geometry-2d"
-    ],
-
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+    testEnvironment: 'jsdom',
 
     testPathIgnorePatterns: [
         "/node_modules/",
     ],
-
-    testEnvironment: 'jsdom',
 
     transform: {
         "^.+\\.tsx?$": "ts-jest"

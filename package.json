@@ -1,11 +1,11 @@
 {
   "name": "comicvm-dom",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "A set of geometric classes like Point, Line, Rectangle etc.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/dom/index.js",
+  "types": "dist/dom/index.d.ts",
   "files": [
-    "dist"
+    "dist/dom"
   ],
   "scripts": {
     "prepare": "npm run compile",
@@ -53,7 +53,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "comicvm-geometry-2d": "^1.0.4",
+    "comicvm-geometry-2d": "^1.0.5",
     "rxjs": "^6.6.3"
   },
   "bugs": {
