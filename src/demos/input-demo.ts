@@ -1,6 +1,6 @@
-import { Div } from "../dom/Div";
-import { Input, InputType } from "../dom/Input";
-import { Label } from "../dom/Label";
+import { Div } from "../dom";
+import { Input, InputType } from "../dom";
+import { Label } from "../dom";
 
 export function createInputDemo(): Div {
     const input = Input.create({
@@ -26,8 +26,11 @@ const input = Input.create({
     name: "text",
     placeholder: "Write something..."
 })
-const label = Label.create();
+const label = Label.create()
+
 input.onKeyUp = (e: KeyboardEvent) => label.text = \`You wrote \$\{input.value\}.\`
+
+input.onInit = () => input.focus()
 </pre>
 `
             ).append("<a target='_blank' href='https://github.com/retojs/comicvm-dom/blob/master/src/demos/input-demo.ts'>view source</a>")

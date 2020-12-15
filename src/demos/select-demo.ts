@@ -1,6 +1,4 @@
-import { Div } from "../dom/Div";
-import { Label } from "../dom/Label";
-import { Select } from "../dom/Select";
+import { Div, Label, Select } from "../dom";
 
 export function createSelectDemo(): Div {
     const select = Select.create({
@@ -11,11 +9,11 @@ export function createSelectDemo(): Div {
     });
     select.onChange = (e: Event) => label.text = `You chose ${select.value}.`
 
-    return Div.create({ styleClass: "demo-section" })
+    return Div.create({styleClass: "demo-section"})
         .append("<h2>Select</h2>")
         .append(select)
         .append(label)
-        .append(Div.create({ styleClass: "code-sample" })
+        .append(Div.create({styleClass: "code-sample"})
             .append(`
 <pre>
 const select = Select.create({

@@ -1,11 +1,5 @@
 import { Dimensions, Point, Rectangle } from "comicvm-geometry-2d";
-import { Canvas } from "../dom/Canvas";
-import { Div } from "../dom/Div";
-import { InputType } from "../dom/Input";
-import { InputWithLabel } from "../dom/InputWithLabel";
-import { Font } from "../dom/util/Font";
-import { PaintStyle } from "../dom/util/PaintStyle";
-import { TextAlign } from "../dom/util/TextAlign";
+import { Canvas, Div, Font, InputType, InputWithLabel, PaintStyle, TextAlign } from "../dom";
 
 export function createCanvasResizeDemo(): Div {
 
@@ -50,7 +44,7 @@ export function createCanvasResizeDemo(): Div {
         canvasResizable.setDimensions(parseInt(widthInput.value), parseInt(heightInput.value));
         canvasResizable.transformTo(canvasFixed.shape.translateToOrigin());
         paintOnCanvas(canvasResizable, `${canvasResizable.width}px * ${canvasResizable.height}px`);
-    };
+    }
 
     //widthInput.onChange = repaint;
     //heightInput.onChange = repaint;

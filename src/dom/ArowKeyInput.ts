@@ -69,11 +69,11 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
     }
 
     setupKeyboardListenersRxJs(onChange: ParameterListener<string>) {
-        let isKeydown = false;
+        let isKeyDown = false;
 
         const keyUp$ = this.input.onKeyUp$.pipe(
             filter((e) => isArrowKeyPressed(e)),
-            tap(() => isKeydown = false),
+            tap(() => isKeyDown = false),
         );
 
         const keyDown$ = this.input.onKeyDown$.pipe(
@@ -81,12 +81,12 @@ export class ArrowKeyInput extends DomElement<HTMLSpanElement> {
             tap((e: KeyboardEvent) => e.preventDefault()),
             // If you keep a key pressed, many keyboard events are emitted,
             // but we are only interested in the first one.
-            filter(() => !isKeydown),
-            tap(() => isKeydown = true),
+            filter(() => !isKeyDown),
+            tap(() => isKeyDown = true),
             // after a short delay start emitting events in regular intervals...
             debounceTime(300),
             switchMap(e => {
-                    if (isKeydown) {
+                    if (isKeyDown) {
                         return interval(ARROW_KEY_CONFIG.repeatInterval).pipe(
                             // until the key is not pressed anymore
                             takeUntil(this.input.onKeyUp$),

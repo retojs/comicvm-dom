@@ -1,9 +1,5 @@
 import { Point } from "comicvm-geometry-2d";
-import { Canvas } from "../dom/Canvas";
-import { Div } from "../dom/Div";
-import { Font } from "../dom/util/Font";
-import { PaintStyle } from "../dom/util/PaintStyle";
-import { TextAlign } from "../dom/util/TextAlign";
+import { Canvas, Div, Font, PaintStyle, TextAlign } from "../dom";
 
 export function createCanvasDemo(): Div {
 
