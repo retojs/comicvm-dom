@@ -1,4 +1,4 @@
-import { DomElement, DomElementContainer, DomElementConfig, DomElementContent, StyleClassConfig } from "./DomElement";
+import { DomElement, DomElementConfig, DomElementContainer, StyleClassConfig } from "./DomElement";
 
 export interface DivDomElementConfig extends DomElementConfig, StyleClassConfig { }
 
@@ -17,11 +17,11 @@ export class Div extends DomElement<HTMLDivElement> {
         styleClass?: string,
     ) {
         super(container);
-        this.htmlElement = this.appendToContainer(this.createDivElement(styleClass));
+        this.htmlElement = this.appendToContainer(this.createDivElement());
         this.class = styleClass;
     }
 
-    protected createDivElement(styleClass: string): HTMLDivElement {
+    protected createDivElement(): HTMLDivElement {
         return this.htmlElement = document.createElement("div");
     }
 }
