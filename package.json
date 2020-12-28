@@ -1,6 +1,6 @@
 {
   "name": "comicvm-dom",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A set of geometric classes like Point, Line, Rectangle etc.",
   "main": "dist/dom/index.js",
   "types": "dist/dom/index.d.ts",

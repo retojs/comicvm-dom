@@ -30,7 +30,7 @@ export interface PaintStyleConfig {
     textAlign?: TextAlign;
     gradient?: GradientProperties;
     enabled?: boolean;
-};
+}
 
 export class PaintStyle {
 
@@ -94,6 +94,15 @@ export class PaintStyle {
     }
 
     clone(): PaintStyle {
-        return new PaintStyle(this.strokeStyle, this.fillStyle, this.lineWidth, this.lineCap, this.font, this.textAlign, this.gradient, this.enabled);
+        return new PaintStyle(
+            this.fillStyle,
+            this.strokeStyle,
+            this.lineWidth,
+            this.lineCap,
+            this.font,
+            this.textAlign,
+            this.gradient,
+            this.enabled
+        );
     }
 }
